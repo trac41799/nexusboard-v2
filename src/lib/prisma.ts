@@ -5,15 +5,20 @@ const globalForPrisma = globalThis as unknown as {
   prisma: PrismaClient | undefined;
 };
 
-function createPrismaClient() {
+export function getPrisma(): PrismaClient {
+  if (globalForPrisma.prisma) return globalForPrisma.prisma;
+
   const adapter = new PrismaPg({
     connectionString: process.env.DATABASE_URL!,
   });
-  return new PrismaClient({ adapter });
+  const client = new PrismaClient({ adapter });
+  globalForPrisma.prisma = client;
+  return client;
 }
 
-export const prisma = globalForPrisma.prisma ?? createPrismaClient();
-
-if (process.env.NODE_ENV !== "production") {
-  globalForPrisma.prisma = prisma;
-}
+// Default export for convenience
+export const prisma = new Proxy({} as PrismaClient, {
+  get(_target, prop) {
+    return (getPrisma() as any)[prop];
+  },
+});
