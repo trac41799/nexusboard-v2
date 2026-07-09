@@ -1,3 +1,5 @@
+export const dynamic = 'force-dynamic';
+
 import { NextRequest } from "next/server";
 import { requireAuth, errorResponse } from "@/lib/auth";
 import { getTaskById, createComment, getComments } from "@/lib/tasks";

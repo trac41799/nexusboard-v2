@@ -1,3 +1,5 @@
+export const dynamic = 'force-dynamic';
+
 import { requireAuth, errorResponse } from "@/lib/auth";
 import { getUserNotifications } from "@/lib/tasks";
 
