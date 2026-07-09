@@ -1,4 +1,4 @@
-import { prisma } from "./prisma";
+﻿import { getPrisma } from "./prisma";
 
 export async function createTask(data: {
   title: string;
@@ -9,7 +9,7 @@ export async function createTask(data: {
   assigneeId?: string;
   dueDate?: string;
 }) {
-  const task = await prisma.task.create({
+  const task = await getPrisma().task.create({
     data: {
       title: data.title,
       description: data.description,
@@ -41,7 +41,7 @@ export async function getTasks(filters: {
   if (filters.priority) where.priority = filters.priority;
   if (filters.assigneeId) where.assigneeId = filters.assigneeId;
 
-  return prisma.task.findMany({
+  return getPrisma().task.findMany({
     where,
     include: {
       creator: { select: { id: true, name: true, email: true } },
@@ -53,7 +53,7 @@ export async function getTasks(filters: {
 }
 
 export async function getTaskById(id: string) {
-  return prisma.task.findUnique({
+  return getPrisma().task.findUnique({
     where: { id },
     include: {
       creator: { select: { id: true, name: true, email: true } },
@@ -88,7 +88,7 @@ export async function updateTask(
   if (data.dueDate !== undefined)
     updateData.dueDate = data.dueDate ? new Date(data.dueDate) : null;
 
-  return prisma.task.update({
+  return getPrisma().task.update({
     where: { id },
     data: updateData,
     include: {
@@ -100,7 +100,7 @@ export async function updateTask(
 }
 
 export async function updateTaskStatus(id: string, status: string) {
-  return prisma.task.update({
+  return getPrisma().task.update({
     where: { id },
     data: { status },
     include: {
@@ -112,7 +112,7 @@ export async function updateTaskStatus(id: string, status: string) {
 }
 
 export async function deleteTask(id: string) {
-  return prisma.task.delete({ where: { id } });
+  return getPrisma().task.delete({ where: { id } });
 }
 
 export async function createComment(data: {
@@ -120,7 +120,7 @@ export async function createComment(data: {
   taskId: string;
   authorId: string;
 }) {
-  return prisma.comment.create({
+  return getPrisma().comment.create({
     data: {
       content: data.content,
       taskId: data.taskId,
@@ -133,7 +133,7 @@ export async function createComment(data: {
 }
 
 export async function getComments(taskId: string) {
-  return prisma.comment.findMany({
+  return getPrisma().comment.findMany({
     where: { taskId },
     include: {
       author: { select: { id: true, name: true, email: true } },
@@ -149,18 +149,18 @@ export async function createNotification(data: {
   body: string;
   link?: string;
 }) {
-  return prisma.notification.create({ data });
+  return getPrisma().notification.create({ data });
 }
 
 export async function getUserNotifications(userId: string) {
-  return prisma.notification.findMany({
+  return getPrisma().notification.findMany({
     where: { userId },
     orderBy: { createdAt: "desc" },
   });
 }
 
 export async function markNotificationRead(id: string) {
-  return prisma.notification.update({
+  return getPrisma().notification.update({
     where: { id },
     data: { read: true },
   });

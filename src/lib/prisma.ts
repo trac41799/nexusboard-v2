@@ -7,18 +7,9 @@ const globalForPrisma = globalThis as unknown as {
 
 export function getPrisma(): PrismaClient {
   if (globalForPrisma.prisma) return globalForPrisma.prisma;
-
   const adapter = new PrismaPg({
     connectionString: process.env.DATABASE_URL!,
   });
-  const client = new PrismaClient({ adapter });
-  globalForPrisma.prisma = client;
-  return client;
+  globalForPrisma.prisma = new PrismaClient({ adapter });
+  return globalForPrisma.prisma;
 }
-
-// Default export for convenience
-export const prisma = new Proxy({} as PrismaClient, {
-  get(_target, prop) {
-    return (getPrisma() as any)[prop];
-  },
-});

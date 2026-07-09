@@ -1,11 +1,11 @@
-import { prisma } from "./prisma";
+﻿import { getPrisma } from "./prisma";
 
 export async function createWorkspace(data: {
   name: string;
   slug: string;
   ownerId: string;
 }) {
-  const workspace = await prisma.workspace.create({
+  const workspace = await getPrisma().workspace.create({
     data: {
       name: data.name,
       slug: data.slug,
@@ -31,7 +31,7 @@ export async function createWorkspace(data: {
 }
 
 export async function getUserWorkspaces(userId: string) {
-  const memberships = await prisma.workspaceMember.findMany({
+  const memberships = await getPrisma().workspaceMember.findMany({
     where: { userId },
     include: {
       workspace: {
@@ -46,7 +46,7 @@ export async function getUserWorkspaces(userId: string) {
 }
 
 export async function getWorkspaceById(id: string) {
-  return prisma.workspace.findUnique({
+  return getPrisma().workspace.findUnique({
     where: { id },
     include: {
       members: {
@@ -62,18 +62,18 @@ export async function getWorkspaceById(id: string) {
 }
 
 export async function updateWorkspace(id: string, data: { name?: string; slug?: string }) {
-  return prisma.workspace.update({
+  return getPrisma().workspace.update({
     where: { id },
     data,
   });
 }
 
 export async function deleteWorkspace(id: string) {
-  return prisma.workspace.delete({ where: { id } });
+  return getPrisma().workspace.delete({ where: { id } });
 }
 
 export async function isWorkspaceMember(userId: string, workspaceId: string) {
-  const member = await prisma.workspaceMember.findUnique({
+  const member = await getPrisma().workspaceMember.findUnique({
     where: { userId_workspaceId: { userId, workspaceId } },
   });
   return !!member;

@@ -1,6 +1,6 @@
-import { NextRequest } from "next/server";
+﻿import { NextRequest } from "next/server";
 import bcrypt from "bcrypt";
-import { prisma } from "@/lib/prisma";
+import { getPrisma } from "@/lib/prisma";
 import { signToken, authResponse, errorResponse } from "@/lib/auth";
 import { loginSchema } from "@/lib/validations";
 
@@ -14,7 +14,7 @@ export async function POST(req: NextRequest) {
 
     const { email, password } = parsed.data;
 
-    const user = await prisma.user.findUnique({ where: { email } });
+    const user = await getPrisma().user.findUnique({ where: { email } });
     if (!user || !user.passwordHash) {
       return errorResponse("Invalid email or password", 401);
     }
