@@ -26,7 +26,9 @@ export async function middleware(req: NextRequest) {
     return NextResponse.next();
   }
 
-  const token = req.cookies.get("nexusboard_token")?.value;
+  const token =
+    req.cookies.get("nexusboard_token")?.value ??
+    req.headers.get("Authorization")?.replace("Bearer ", "");
 
   if (!token) {
     if (pathname.startsWith("/api/")) {
