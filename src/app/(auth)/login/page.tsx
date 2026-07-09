@@ -32,6 +32,9 @@ export default function LoginPage() {
         return;
       }
 
+      const data = await res.json();
+      localStorage.setItem("nexusboard_token", data.token);
+      localStorage.setItem("nexusboard_user", JSON.stringify(data.user));
       router.push("/");
       router.refresh();
     } catch {
