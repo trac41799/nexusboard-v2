@@ -7,17 +7,19 @@ const globalForPrisma = globalThis as unknown as {
 export async function getPrisma(): Promise<PrismaClient> {
   if (globalForPrisma.prisma) return globalForPrisma.prisma;
 
-  const { PrismaPg } = await import("@prisma/adapter-pg");
+  const { PrismaNeon } = await import("@prisma/adapter-neon");
+  const { Pool, neonConfig } = await import("@neondatabase/serverless");
   const { PrismaClient: PC } = await import("@prisma/client");
 
-  const adapter = new PrismaPg({
-    connectionString: process.env.DATABASE_URL!,
-  });
-  globalForPrisma.prisma = new PC({ adapter });
+  // Required for Vercel serverless — use WebSocket instead of TCP
+  neonConfig.webSocketConstructor = (await import("ws")).default;
+
+  const pool = new Pool({ connectionString: process.env.DATABASE_URL! });
+
+  globalForPrisma.prisma = new PC({ adapter: new PrismaNeon(pool) });
   return globalForPrisma.prisma;
 }
 
-// Sync wrapper for convenience — queues the promise
 let prismaPromise: Promise<PrismaClient> | null = null;
 export function prisma(): Promise<PrismaClient> {
   if (!prismaPromise) prismaPromise = getPrisma();
