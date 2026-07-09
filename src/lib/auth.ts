@@ -47,12 +47,8 @@ export async function requireAuth(): Promise<JWTPayload> {
 }
 
 export async function requireAuthApi(req: NextRequest): Promise<JWTPayload> {
-  const token =
-    req.cookies.get(COOKIE_NAME)?.value ??
-    req.headers.get("Authorization")?.replace("Bearer ", "");
-
+  const token = req.cookies.get(COOKIE_NAME)?.value;
   if (!token) throw new Error("Unauthorized");
-
   const payload = await verifyToken(token);
   if (!payload) throw new Error("Unauthorized");
   return payload;

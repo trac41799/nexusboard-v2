@@ -20,11 +20,7 @@ export default function DashboardLayout({
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const token = localStorage.getItem("nexusboard_token");
-    fetch("/api/auth/me", {
-      credentials: "include",
-      headers: token ? { Authorization: `Bearer ${token}` } : {},
-    })
+    fetch("/api/auth/me", { credentials: "include" })
       .then((res) => {
         if (!res.ok) {
           router.push("/login");
