@@ -41,7 +41,7 @@ export async function getTasks(filters: {
   if (filters.priority) where.priority = filters.priority;
   if (filters.assigneeId) where.assigneeId = filters.assigneeId;
 
-  return getPrisma().task.findMany({
+  return (await getPrisma()).task.findMany({
     where,
     include: {
       creator: { select: { id: true, name: true, email: true } },
@@ -53,7 +53,7 @@ export async function getTasks(filters: {
 }
 
 export async function getTaskById(id: string) {
-  return getPrisma().task.findUnique({
+  return (await getPrisma()).task.findUnique({
     where: { id },
     include: {
       creator: { select: { id: true, name: true, email: true } },
@@ -88,7 +88,7 @@ export async function updateTask(
   if (data.dueDate !== undefined)
     updateData.dueDate = data.dueDate ? new Date(data.dueDate) : null;
 
-  return getPrisma().task.update({
+  return (await getPrisma()).task.update({
     where: { id },
     data: updateData,
     include: {
@@ -100,7 +100,7 @@ export async function updateTask(
 }
 
 export async function updateTaskStatus(id: string, status: string) {
-  return getPrisma().task.update({
+  return (await getPrisma()).task.update({
     where: { id },
     data: { status },
     include: {
@@ -112,7 +112,7 @@ export async function updateTaskStatus(id: string, status: string) {
 }
 
 export async function deleteTask(id: string) {
-  return getPrisma().task.delete({ where: { id } });
+  return (await getPrisma()).task.delete({ where: { id } });
 }
 
 export async function createComment(data: {
@@ -120,7 +120,7 @@ export async function createComment(data: {
   taskId: string;
   authorId: string;
 }) {
-  return getPrisma().comment.create({
+  return (await getPrisma()).comment.create({
     data: {
       content: data.content,
       taskId: data.taskId,
@@ -133,7 +133,7 @@ export async function createComment(data: {
 }
 
 export async function getComments(taskId: string) {
-  return getPrisma().comment.findMany({
+  return (await getPrisma()).comment.findMany({
     where: { taskId },
     include: {
       author: { select: { id: true, name: true, email: true } },
@@ -149,18 +149,18 @@ export async function createNotification(data: {
   body: string;
   link?: string;
 }) {
-  return getPrisma().notification.create({ data });
+  return (await getPrisma()).notification.create({ data });
 }
 
 export async function getUserNotifications(userId: string) {
-  return getPrisma().notification.findMany({
+  return (await getPrisma()).notification.findMany({
     where: { userId },
     orderBy: { createdAt: "desc" },
   });
 }
 
 export async function markNotificationRead(id: string) {
-  return getPrisma().notification.update({
+  return (await getPrisma()).notification.update({
     where: { id },
     data: { read: true },
   });

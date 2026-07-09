@@ -46,7 +46,7 @@ export async function getUserWorkspaces(userId: string) {
 }
 
 export async function getWorkspaceById(id: string) {
-  return getPrisma().workspace.findUnique({
+  return (await getPrisma()).workspace.findUnique({
     where: { id },
     include: {
       members: {
@@ -62,14 +62,14 @@ export async function getWorkspaceById(id: string) {
 }
 
 export async function updateWorkspace(id: string, data: { name?: string; slug?: string }) {
-  return getPrisma().workspace.update({
+  return (await getPrisma()).workspace.update({
     where: { id },
     data,
   });
 }
 
 export async function deleteWorkspace(id: string) {
-  return getPrisma().workspace.delete({ where: { id } });
+  return (await getPrisma()).workspace.delete({ where: { id } });
 }
 
 export async function isWorkspaceMember(userId: string, workspaceId: string) {
