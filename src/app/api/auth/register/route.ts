@@ -2,7 +2,7 @@ export const dynamic = 'force-dynamic';
 
 import { NextRequest } from "next/server";
 import bcrypt from 'bcryptjs';
-import { getPrisma } from "@/lib/prisma";
+import { getSupabase } from "@/lib/supabase";
 import { signToken, authResponse, errorResponse } from "@/lib/auth";
 import { registerSchema } from "@/lib/validations";
 
@@ -16,16 +16,28 @@ export async function POST(req: NextRequest) {
 
     const { email, password, name } = parsed.data;
 
-    const existing = await getPrisma().user.findUnique({ where: { email } });
+    const { data: existing } = await getSupabase()
+      .from('users')
+      .select('*')
+      .eq('email', email)
+      .maybeSingle();
+
     if (existing) {
       return errorResponse("Email already registered", 409);
     }
 
     const passwordHash = await bcrypt.hash(password, 12);
 
-    const user = await getPrisma().user.create({
-      data: { email, name, passwordHash },
-    });
+    const { data: user, error } = await getSupabase()
+      .from('users')
+      .insert({ email, name, passwordHash })
+      .select()
+      .single();
+
+    if (error) {
+      console.error("[register] insert error:", error);
+      return errorResponse("Internal server error", 500);
+    }
 
     const token = await signToken({
       userId: user.id,

@@ -2,17 +2,18 @@ export const dynamic = 'force-dynamic';
 
 import { NextRequest } from "next/server";
 import { requireAuth, errorResponse } from "@/lib/auth";
-import { getPrisma } from "@/lib/prisma";
+import { getSupabase } from "@/lib/supabase";
 import { updateProfileSchema } from "@/lib/validations";
 
 export async function GET() {
   try {
     const session = await requireAuth();
 
-    const user = await getPrisma().user.findUnique({
-      where: { id: session.userId },
-      select: { id: true, email: true, name: true, createdAt: true },
-    });
+    const { data: user } = await getSupabase()
+      .from('users')
+      .select('id, email, name, createdAt')
+      .eq('id', session.userId)
+      .maybeSingle();
 
     if (!user) {
       return errorResponse("User not found", 404);
@@ -33,11 +34,17 @@ export async function PATCH(req: NextRequest) {
       return errorResponse(parsed.error.issues[0].message, 400);
     }
 
-    const user = await getPrisma().user.update({
-      where: { id: session.userId },
-      data: parsed.data,
-      select: { id: true, email: true, name: true, createdAt: true },
-    });
+    const { data: user, error } = await getSupabase()
+      .from('users')
+      .update(parsed.data)
+      .eq('id', session.userId)
+      .select('id, email, name, createdAt')
+      .single();
+
+    if (error) {
+      console.error("[me] update error:", error);
+      return errorResponse("Internal server error", 500);
+    }
 
     return Response.json({ user });
   } catch (err: unknown) {

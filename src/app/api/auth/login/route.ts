@@ -2,7 +2,7 @@ export const dynamic = 'force-dynamic';
 
 import { NextRequest } from "next/server";
 import bcrypt from 'bcryptjs';
-import { getPrisma } from "@/lib/prisma";
+import { getSupabase } from "@/lib/supabase";
 import { signToken, authResponse, errorResponse } from "@/lib/auth";
 import { loginSchema } from "@/lib/validations";
 
@@ -16,7 +16,12 @@ export async function POST(req: NextRequest) {
 
     const { email, password } = parsed.data;
 
-    const user = await getPrisma().user.findUnique({ where: { email } });
+    const { data: user } = await getSupabase()
+      .from('users')
+      .select('*')
+      .eq('email', email)
+      .maybeSingle();
+
     if (!user || !user.passwordHash) {
       return errorResponse("Invalid email or password", 401);
     }
