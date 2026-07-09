@@ -1,10 +1,9 @@
-﻿generator client {
+generator client {
   provider = "prisma-client-js"
 }
 
 datasource db {
   provider = "postgresql"
-  url      = env("DATABASE_URL")
 }
 
 model User {
@@ -17,8 +16,8 @@ model User {
 
   ownedWorkspaces  Workspace[]
   memberships      WorkspaceMember[]
-  createdTasks     Task[]
-  assignedTasks    Task[]
+  createdTasks     Task[]         @relation("TaskCreator")
+  assignedTasks    Task[]         @relation("TaskAssignee")
   comments         Comment[]
   notifications    Notification[]
 
@@ -68,8 +67,8 @@ model Task {
   updatedAt   DateTime  @updatedAt
 
   workspace Workspace @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
-  creator   User      @relation(fields: [creatorId], references: [id], onDelete: Cascade)
-  assignee  User?     @relation(fields: [assigneeId], references: [id], onDelete: SetNull)
+  creator   User      @relation("TaskCreator", fields: [creatorId], references: [id], onDelete: Cascade)
+  assignee  User?     @relation("TaskAssignee", fields: [assigneeId], references: [id], onDelete: SetNull)
   comments  Comment[]
 
   @@index([workspaceId])
