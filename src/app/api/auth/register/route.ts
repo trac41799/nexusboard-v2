@@ -1,7 +1,7 @@
 export const dynamic = 'force-dynamic';
 
 import { NextRequest } from "next/server";
-import bcrypt from "bcrypt";
+import bcrypt from 'bcryptjs';
 import { getPrisma } from "@/lib/prisma";
 import { signToken, authResponse, errorResponse } from "@/lib/auth";
 import { registerSchema } from "@/lib/validations";
@@ -41,7 +41,8 @@ export async function POST(req: NextRequest) {
       token,
       201
     );
-  } catch {
+  } catch (err) {
+    console.error("[register]", err);
     return errorResponse("Internal server error", 500);
   }
 }

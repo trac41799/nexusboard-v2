@@ -1,7 +1,7 @@
 export const dynamic = 'force-dynamic';
 
 import { NextRequest } from "next/server";
-import bcrypt from "bcrypt";
+import bcrypt from 'bcryptjs';
 import { getPrisma } from "@/lib/prisma";
 import { signToken, authResponse, errorResponse } from "@/lib/auth";
 import { loginSchema } from "@/lib/validations";
