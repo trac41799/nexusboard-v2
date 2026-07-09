@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { Button } from "@/components/ui/Button";
 import { Input } from "@/components/ui/Input";
-import { Card, CardHeader, CardTitle } from "@/components/ui/Card";
+import { Card } from "@/components/ui/Card";
 
 export default function RegisterPage() {
   const router = useRouter();
@@ -43,11 +43,12 @@ export default function RegisterPage() {
   };
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-zinc-50 px-4 dark:bg-black">
+    <div className="flex min-h-screen items-center justify-center bg-slate-100 px-4">
       <Card className="w-full max-w-md" padding="lg">
-        <CardHeader>
-          <CardTitle>Create your account</CardTitle>
-        </CardHeader>
+        <div className="mb-6 text-center">
+          <h1 className="text-2xl font-bold text-slate-900">NexusBoard</h1>
+          <p className="mt-1 text-sm text-slate-500">Create your account</p>
+        </div>
         <form onSubmit={handleSubmit} className="space-y-4">
           <Input
             label="Name"
@@ -76,7 +77,7 @@ export default function RegisterPage() {
             required
           />
           {error && (
-            <div className="rounded-lg bg-red-50 p-3 text-sm text-red-600 dark:bg-red-900/20 dark:text-red-400">
+            <div className="bg-red-50 text-red-700 rounded-md p-3 text-sm">
               {error}
             </div>
           )}
@@ -84,11 +85,11 @@ export default function RegisterPage() {
             {loading ? "Creating account..." : "Create account"}
           </Button>
         </form>
-        <p className="mt-4 text-center text-sm text-zinc-500 dark:text-zinc-400">
+        <p className="mt-4 text-center text-sm text-slate-500">
           Already have an account?{" "}
           <Link
             href="/login"
-            className="font-medium text-blue-600 hover:text-blue-500 dark:text-blue-400"
+            className="font-medium text-indigo-600 hover:text-indigo-500"
           >
             Sign in
           </Link>

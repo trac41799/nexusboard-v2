@@ -64,19 +64,19 @@ export default function DashboardPage() {
   if (loading) {
     return (
       <div className="flex items-center justify-center py-20">
-        <div className="h-8 w-8 animate-spin rounded-full border-2 border-blue-600 border-t-transparent" />
+        <div className="h-8 w-8 animate-spin rounded-full border-2 border-indigo-600 border-t-transparent" />
       </div>
     );
   }
 
   return (
-    <div className="mx-auto max-w-5xl px-6 py-8">
+    <div className="mx-auto max-w-6xl px-4 py-8">
       <div className="mb-8 flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-bold text-zinc-900 dark:text-zinc-100">
+          <h1 className="text-2xl font-bold text-slate-900">
             Your Workspaces
           </h1>
-          <p className="mt-1 text-sm text-zinc-500 dark:text-zinc-400">
+          <p className="mt-1 text-sm text-slate-500">
             Manage your team workspaces and projects
           </p>
         </div>
@@ -114,7 +114,7 @@ export default function DashboardPage() {
 
       {workspaces.length === 0 ? (
         <Card className="py-12 text-center">
-          <p className="text-zinc-500 dark:text-zinc-400">
+          <p className="text-slate-500">
             No workspaces yet. Create your first workspace to get started.
           </p>
         </Card>
@@ -122,11 +122,11 @@ export default function DashboardPage() {
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {workspaces.map((ws) => (
             <Link key={ws.id} href={`/workspaces/${ws.id}`}>
-              <Card className="h-full transition-shadow hover:shadow-md">
-                <h3 className="text-lg font-semibold text-zinc-900 dark:text-zinc-100">
+              <Card className="h-full transition-shadow hover:shadow-xl">
+                <h3 className="text-lg font-semibold text-slate-900">
                   {ws.name}
                 </h3>
-                <p className="mt-1 text-sm text-zinc-500 dark:text-zinc-400">
+                <p className="mt-1 text-sm text-slate-500">
                   /{ws.slug}
                 </p>
                 <div className="mt-4 flex gap-2">

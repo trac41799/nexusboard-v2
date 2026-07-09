@@ -7,13 +7,13 @@ interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
 
 const variantClasses: Record<string, string> = {
   primary:
-    "bg-blue-600 text-white hover:bg-blue-700 focus-visible:ring-blue-500",
+    "bg-indigo-600 text-white hover:bg-indigo-700 focus-visible:ring-indigo-500",
   secondary:
-    "bg-zinc-100 text-zinc-900 hover:bg-zinc-200 focus-visible:ring-zinc-400 dark:bg-zinc-800 dark:text-zinc-100 dark:hover:bg-zinc-700",
+    "bg-slate-200 text-slate-900 hover:bg-slate-300 focus-visible:ring-slate-400",
   outline:
-    "border border-zinc-300 text-zinc-700 hover:bg-zinc-50 focus-visible:ring-zinc-400 dark:border-zinc-600 dark:text-zinc-300 dark:hover:bg-zinc-800",
+    "border border-slate-300 text-slate-700 hover:bg-slate-50 focus-visible:ring-slate-400",
   ghost:
-    "text-zinc-600 hover:bg-zinc-100 focus-visible:ring-zinc-400 dark:text-zinc-400 dark:hover:bg-zinc-800",
+    "text-slate-600 hover:bg-slate-100 focus-visible:ring-slate-400",
   danger:
     "bg-red-600 text-white hover:bg-red-700 focus-visible:ring-red-500",
 };

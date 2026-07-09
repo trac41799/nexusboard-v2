@@ -39,8 +39,8 @@ export default function DashboardLayout({
 
   if (loading) {
     return (
-      <div className="flex min-h-screen items-center justify-center bg-zinc-50 dark:bg-black">
-        <div className="h-8 w-8 animate-spin rounded-full border-2 border-blue-600 border-t-transparent" />
+      <div className="flex min-h-screen items-center justify-center bg-slate-100">
+        <div className="h-8 w-8 animate-spin rounded-full border-2 border-indigo-600 border-t-transparent" />
       </div>
     );
   }
@@ -48,7 +48,7 @@ export default function DashboardLayout({
   if (!user) return null;
 
   return (
-    <div className="flex min-h-screen flex-col bg-zinc-50 dark:bg-black">
+    <div className="flex min-h-screen flex-col bg-slate-100">
       <Navbar user={user} />
       <main className="flex-1">{children}</main>
     </div>

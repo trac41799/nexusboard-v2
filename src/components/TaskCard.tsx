@@ -2,7 +2,6 @@
 
 import { Avatar } from "@/components/ui/Avatar";
 import { Badge } from "@/components/ui/Badge";
-import { Card } from "@/components/ui/Card";
 
 const priorityColors: Record<string, "warning" | "danger" | "info" | "default"> = {
   LOW: "info",
@@ -37,9 +36,8 @@ export function TaskCard({ task, onClick, draggable = true, onDragStart }: TaskC
   };
 
   return (
-    <Card
-      padding="sm"
-      className={`cursor-pointer transition-shadow hover:shadow-md ${
+    <div
+      className={`cursor-pointer rounded-lg border border-slate-200 bg-white p-3 shadow-sm transition-shadow hover:shadow-md ${
         draggable ? "active:cursor-grabbing" : ""
       }`}
       onClick={onClick}
@@ -47,7 +45,7 @@ export function TaskCard({ task, onClick, draggable = true, onDragStart }: TaskC
       onDragStart={handleDragStart}
     >
       <div className="flex items-start justify-between gap-2">
-        <h4 className="text-sm font-medium text-zinc-900 dark:text-zinc-100">
+        <h4 className="text-sm font-medium text-slate-900">
           {task.title}
         </h4>
         <Badge variant={priorityColors[task.priority] || "default"}>
@@ -55,7 +53,7 @@ export function TaskCard({ task, onClick, draggable = true, onDragStart }: TaskC
         </Badge>
       </div>
       {task.description && (
-        <p className="mt-1.5 text-xs text-zinc-500 dark:text-zinc-400 line-clamp-2">
+        <p className="mt-1.5 text-xs text-slate-500 line-clamp-2">
           {task.description}
         </p>
       )}
@@ -63,9 +61,9 @@ export function TaskCard({ task, onClick, draggable = true, onDragStart }: TaskC
         {task.assignee ? (
           <Avatar name={task.assignee.name} size="sm" />
         ) : (
-          <span className="text-xs text-zinc-400">Unassigned</span>
+          <span className="text-xs text-slate-400">Unassigned</span>
         )}
-        <div className="flex items-center gap-2 text-xs text-zinc-400">
+        <div className="flex items-center gap-2 text-xs text-slate-400">
           {task._count ? (
             <span>{task._count.comments} comments</span>
           ) : null}
@@ -74,6 +72,6 @@ export function TaskCard({ task, onClick, draggable = true, onDragStart }: TaskC
           )}
         </div>
       </div>
-    </Card>
+    </div>
   );
 }

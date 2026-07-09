@@ -7,8 +7,8 @@ interface CardProps extends HTMLAttributes<HTMLDivElement> {
 const paddingClasses: Record<string, string> = {
   none: "",
   sm: "p-4",
-  md: "p-5",
-  lg: "p-6",
+  md: "p-6",
+  lg: "p-8",
 };
 
 export const Card = forwardRef<HTMLDivElement, CardProps>(
@@ -16,7 +16,7 @@ export const Card = forwardRef<HTMLDivElement, CardProps>(
     return (
       <div
         ref={ref}
-        className={`rounded-xl border border-zinc-200 bg-white shadow-sm dark:border-zinc-800 dark:bg-zinc-900 ${paddingClasses[padding]} ${className}`}
+        className={`rounded-xl bg-white shadow-lg ${paddingClasses[padding]} ${className}`}
         {...props}
       >
         {children}
@@ -49,7 +49,7 @@ export function CardTitle({
   children: React.ReactNode;
 }) {
   return (
-    <h3 className={`text-lg font-semibold text-zinc-900 dark:text-zinc-100 ${className}`}>
+    <h3 className={`text-lg font-semibold text-slate-900 ${className}`}>
       {children}
     </h3>
   );

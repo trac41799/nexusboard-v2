@@ -60,7 +60,7 @@ export default function SettingsPage() {
   if (loading) {
     return (
       <div className="flex items-center justify-center py-20">
-        <div className="h-8 w-8 animate-spin rounded-full border-2 border-blue-600 border-t-transparent" />
+        <div className="h-8 w-8 animate-spin rounded-full border-2 border-indigo-600 border-t-transparent" />
       </div>
     );
   }
@@ -68,8 +68,8 @@ export default function SettingsPage() {
   if (!user) return null;
 
   return (
-    <div className="mx-auto max-w-2xl px-6 py-8">
-      <h1 className="mb-8 text-2xl font-bold text-zinc-900 dark:text-zinc-100">
+    <div className="mx-auto max-w-2xl px-4 py-8">
+      <h1 className="mb-8 text-2xl font-bold text-slate-900">
         Settings
       </h1>
 
@@ -80,10 +80,10 @@ export default function SettingsPage() {
         <div className="mb-6 flex items-center gap-4">
           <Avatar name={user.name} size="lg" />
           <div>
-            <p className="font-medium text-zinc-900 dark:text-zinc-100">
+            <p className="font-medium text-slate-900">
               {user.name}
             </p>
-            <p className="text-sm text-zinc-500 dark:text-zinc-400">
+            <p className="text-sm text-slate-500">
               {user.email}
             </p>
           </div>
@@ -105,8 +105,8 @@ export default function SettingsPage() {
             <div
               className={`rounded-lg p-3 text-sm ${
                 message.includes("success")
-                  ? "bg-green-50 text-green-600 dark:bg-green-900/20 dark:text-green-400"
-                  : "bg-red-50 text-red-600 dark:bg-red-900/20 dark:text-red-400"
+                  ? "bg-green-50 text-green-700"
+                  : "bg-red-50 text-red-700"
               }`}
             >
               {message}
@@ -122,18 +122,18 @@ export default function SettingsPage() {
         <CardHeader>
           <CardTitle>Account</CardTitle>
         </CardHeader>
-        <div className="space-y-3 text-sm text-zinc-600 dark:text-zinc-400">
+        <div className="space-y-3 text-sm text-slate-700">
           <p>
-            <span className="font-medium text-zinc-900 dark:text-zinc-100">
+            <span className="font-medium text-slate-900">
               Member since:{" "}
             </span>
             {new Date(user.createdAt).toLocaleDateString()}
           </p>
           <p>
-            <span className="font-medium text-zinc-900 dark:text-zinc-100">
+            <span className="font-medium text-slate-900">
               User ID:{" "}
             </span>
-            <code className="rounded bg-zinc-100 px-1.5 py-0.5 text-xs dark:bg-zinc-800">
+            <code className="rounded bg-slate-100 px-1.5 py-0.5 text-xs">
               {user.id}
             </code>
           </p>

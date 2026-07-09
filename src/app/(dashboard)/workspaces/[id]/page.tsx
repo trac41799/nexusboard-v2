@@ -3,7 +3,6 @@
 import { useEffect, useState, useCallback } from "react";
 import { useParams } from "next/navigation";
 import { Button } from "@/components/ui/Button";
-import { Card } from "@/components/ui/Card";
 import { Badge } from "@/components/ui/Badge";
 import { KanbanColumn } from "@/components/KanbanColumn";
 import { CreateTaskDialog } from "@/components/CreateTaskDialog";
@@ -96,7 +95,7 @@ export default function WorkspacePage() {
   if (loading) {
     return (
       <div className="flex items-center justify-center py-20">
-        <div className="h-8 w-8 animate-spin rounded-full border-2 border-blue-600 border-t-transparent" />
+        <div className="h-8 w-8 animate-spin rounded-full border-2 border-indigo-600 border-t-transparent" />
       </div>
     );
   }
@@ -104,7 +103,7 @@ export default function WorkspacePage() {
   if (!workspace) {
     return (
       <div className="py-20 text-center">
-        <p className="text-zinc-500">Workspace not found.</p>
+        <p className="text-slate-500">Workspace not found.</p>
       </div>
     );
   }
@@ -116,15 +115,15 @@ export default function WorkspacePage() {
 
   return (
     <div className="flex h-full flex-col">
-      <div className="border-b border-zinc-200 bg-white px-6 py-4 dark:border-zinc-800 dark:bg-zinc-950">
-        <div className="mx-auto max-w-[1600px] flex items-center justify-between">
+      <div className="border-b border-slate-200 bg-white px-6 py-4">
+        <div className="mx-auto max-w-6xl flex items-center justify-between">
           <div>
-            <h1 className="text-xl font-bold text-zinc-900 dark:text-zinc-100">
+            <h1 className="text-xl font-bold text-slate-900">
               {workspace.name}
             </h1>
             <div className="mt-1 flex items-center gap-2">
               <Badge variant="default">{workspace.slug}</Badge>
-              <span className="text-sm text-zinc-500">
+              <span className="text-sm text-slate-500">
                 {workspace._count.tasks} tasks
               </span>
             </div>
