@@ -1,15 +1,15 @@
 export const dynamic = 'force-dynamic';
 
 import { NextRequest } from "next/server";
-import { requireAuth, errorResponse } from "@/lib/auth";
+import { requireAuthApi, errorResponse } from "@/lib/auth";
 import { markNotificationRead } from "@/lib/tasks";
 
 export async function PATCH(
-  _req: NextRequest,
+  req: NextRequest,
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    await requireAuth();
+    await requireAuthApi(req);
     const { id } = await params;
 
     const notification = await markNotificationRead(id);

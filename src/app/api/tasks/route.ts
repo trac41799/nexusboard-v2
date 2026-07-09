@@ -1,14 +1,14 @@
 export const dynamic = 'force-dynamic';
 
 import { NextRequest } from "next/server";
-import { requireAuth, errorResponse } from "@/lib/auth";
+import { requireAuthApi, errorResponse } from "@/lib/auth";
 import { createTask, getTasks } from "@/lib/tasks";
 import { isWorkspaceMember } from "@/lib/workspaces";
 import { createTaskSchema } from "@/lib/validations";
 
 export async function POST(req: NextRequest) {
   try {
-    const session = await requireAuth();
+    const session = await requireAuthApi(req);
     const body = await req.json();
     const parsed = createTaskSchema.safeParse(body);
     if (!parsed.success)
@@ -36,7 +36,7 @@ export async function POST(req: NextRequest) {
 
 export async function GET(req: NextRequest) {
   try {
-    const session = await requireAuth();
+    const session = await requireAuthApi(req);
     const url = new URL(req.url);
     const workspaceId = url.searchParams.get("workspaceId");
     const status = url.searchParams.get("status") || undefined;

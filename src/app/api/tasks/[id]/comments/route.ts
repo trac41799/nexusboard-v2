@@ -1,7 +1,7 @@
 export const dynamic = 'force-dynamic';
 
 import { NextRequest } from "next/server";
-import { requireAuth, errorResponse } from "@/lib/auth";
+import { requireAuthApi, errorResponse } from "@/lib/auth";
 import { getTaskById, createComment, getComments } from "@/lib/tasks";
 import { isWorkspaceMember } from "@/lib/workspaces";
 import { createCommentSchema } from "@/lib/validations";
@@ -11,7 +11,7 @@ export async function POST(
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const session = await requireAuth();
+    const session = await requireAuthApi(req);
     const { id } = await params;
 
     const task = await getTaskById(id);
@@ -41,11 +41,11 @@ export async function POST(
 }
 
 export async function GET(
-  _req: NextRequest,
+  req: NextRequest,
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const session = await requireAuth();
+    const session = await requireAuthApi(req);
     const { id } = await params;
 
     const task = await getTaskById(id);

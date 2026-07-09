@@ -46,6 +46,18 @@ export async function requireAuth(): Promise<JWTPayload> {
   return session;
 }
 
+export async function requireAuthApi(req: NextRequest): Promise<JWTPayload> {
+  const token =
+    req.cookies.get(COOKIE_NAME)?.value ??
+    req.headers.get("Authorization")?.replace("Bearer ", "");
+
+  if (!token) throw new Error("Unauthorized");
+
+  const payload = await verifyToken(token);
+  if (!payload) throw new Error("Unauthorized");
+  return payload;
+}
+
 export function setTokenCookie(token: string): string {
   return `${COOKIE_NAME}=${token}; HttpOnly; Path=/; Max-Age=604800; SameSite=Lax${
     process.env.NODE_ENV === "production" ? "; Secure" : ""

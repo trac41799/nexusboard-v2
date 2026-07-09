@@ -1,11 +1,12 @@
 export const dynamic = 'force-dynamic';
 
-import { requireAuth, errorResponse } from "@/lib/auth";
+import { NextRequest } from "next/server";
+import { requireAuthApi, errorResponse } from "@/lib/auth";
 import { getUserNotifications } from "@/lib/tasks";
 
-export async function GET() {
+export async function GET(req: NextRequest) {
   try {
-    const session = await requireAuth();
+    const session = await requireAuthApi(req);
     const notifications = await getUserNotifications(session.userId);
     return Response.json({ notifications });
   } catch (err: unknown) {

@@ -1,7 +1,7 @@
 export const dynamic = 'force-dynamic';
 
 import { NextRequest } from "next/server";
-import { requireAuth, errorResponse } from "@/lib/auth";
+import { requireAuthApi, errorResponse } from "@/lib/auth";
 import {
   getWorkspaceById,
   updateWorkspace,
@@ -11,11 +11,11 @@ import {
 import { updateWorkspaceSchema } from "@/lib/validations";
 
 export async function GET(
-  _req: NextRequest,
+  req: NextRequest,
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const session = await requireAuth();
+    const session = await requireAuthApi(req);
     const { id } = await params;
 
     const workspace = await getWorkspaceById(id);
@@ -38,7 +38,7 @@ export async function PATCH(
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const session = await requireAuth();
+    const session = await requireAuthApi(req);
     const { id } = await params;
 
     const workspace = await getWorkspaceById(id);
@@ -62,11 +62,11 @@ export async function PATCH(
 }
 
 export async function DELETE(
-  _req: NextRequest,
+  req: NextRequest,
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const session = await requireAuth();
+    const session = await requireAuthApi(req);
     const { id } = await params;
 
     const workspace = await getWorkspaceById(id);

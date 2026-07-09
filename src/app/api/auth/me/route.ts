@@ -1,13 +1,13 @@
 export const dynamic = 'force-dynamic';
 
 import { NextRequest } from "next/server";
-import { requireAuth, errorResponse } from "@/lib/auth";
+import { requireAuthApi, errorResponse } from "@/lib/auth";
 import { getSupabase } from "@/lib/supabase";
 import { updateProfileSchema } from "@/lib/validations";
 
-export async function GET() {
+export async function GET(req: NextRequest) {
   try {
-    const session = await requireAuth();
+    const session = await requireAuthApi(req);
 
     const { data: user } = await getSupabase()
       .from('users')
@@ -27,7 +27,7 @@ export async function GET() {
 
 export async function PATCH(req: NextRequest) {
   try {
-    const session = await requireAuth();
+    const session = await requireAuthApi(req);
     const body = await req.json();
     const parsed = updateProfileSchema.safeParse(body);
     if (!parsed.success) {
