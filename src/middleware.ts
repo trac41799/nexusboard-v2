@@ -1,9 +1,4 @@
 import { NextRequest, NextResponse } from "next/server";
-import { jwtVerify } from "jose";
-
-const JWT_SECRET = new TextEncoder().encode(
-  process.env.JWT_SECRET || "fallback-secret-change-me"
-);
 
 const publicPaths = [
   "/login",
@@ -37,16 +32,9 @@ export async function middleware(req: NextRequest) {
     return NextResponse.redirect(new URL("/login", req.url));
   }
 
-  try {
-    await jwtVerify(token, JWT_SECRET);
-    return NextResponse.next();
-  } catch {
-    const res = pathname.startsWith("/api/")
-      ? NextResponse.json({ error: "Unauthorized" }, { status: 401 })
-      : NextResponse.redirect(new URL("/login", req.url));
-    res.cookies.delete("nexusboard_token");
-    return res;
-  }
+  // Pass through — actual JWT verification happens in route handlers
+  // (middleware runs at Edge where process.env.JWT_SECRET isn't available)
+  return NextResponse.next();
 }
 
 export const config = {
