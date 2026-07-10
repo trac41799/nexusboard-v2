@@ -41,7 +41,7 @@ export function Navbar({ user }: NavbarProps) {
             NexusBoard
           </Link>
           <nav className="hidden sm:flex items-center gap-1">
-            <Link href="/" className={linkClass("/")}>
+            <Link href="/dashboard" className={linkClass("/dashboard")}>
               Workspaces
             </Link>
             <Link href="/settings" className={linkClass("/settings")}>
