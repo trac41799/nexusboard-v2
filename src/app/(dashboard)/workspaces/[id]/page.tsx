@@ -22,8 +22,10 @@ interface Task {
   status: string;
   priority: string;
   assignee?: User | null;
+  creator?: User | null;
   _count?: { comments: number };
   dueDate?: string | null;
+  saving?: boolean;
 }
 
 interface Workspace {
@@ -40,6 +42,7 @@ export default function WorkspacePage() {
   const [tasks, setTasks] = useState<Task[]>([]);
   const [loading, setLoading] = useState(true);
   const [showCreate, setShowCreate] = useState(false);
+  const [createError, setCreateError] = useState("");
 
   const fetchTasks = useCallback(() => {
     fetch(`/api/tasks?workspaceId=${id}`)
@@ -61,7 +64,7 @@ export default function WorkspacePage() {
 
   const handleDrop = async (taskId: string, newStatus: string) => {
     const task = tasks.find((t) => t.id === taskId);
-    if (!task || task.status === newStatus) return;
+    if (!task || task.status === newStatus || task.saving) return;
 
     const res = await fetch(`/api/tasks/${taskId}/status`, {
       method: "PATCH",
@@ -80,16 +83,51 @@ export default function WorkspacePage() {
     description?: string;
     priority: string;
   }) => {
-    const res = await fetch("/api/tasks", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ ...data, workspaceId: id }),
-    });
+    setCreateError("");
 
-    if (res.ok) {
+    const tempId = `temp-${Date.now()}`;
+    const optimisticTask: Task = {
+      id: tempId,
+      title: data.title,
+      description: data.description || null,
+      status: "TODO",
+      priority: data.priority || "MEDIUM",
+      assignee: null,
+      _count: { comments: 0 },
+      dueDate: null,
+      saving: true,
+    };
+
+    setTasks((prev) => [optimisticTask, ...prev]);
+    setShowCreate(false);
+
+    try {
+      const res = await fetch("/api/tasks", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ ...data, workspaceId: id }),
+      });
+
+      if (!res.ok) {
+        const err = await res.json();
+        throw new Error(err.error || "Failed to create task");
+      }
+
       const d = await res.json();
-      setTasks((prev) => [d.task, ...prev]);
+      setTasks((prev) => prev.map((t) => (t.id === tempId ? d.task : t)));
+    } catch (err: unknown) {
+      setTasks((prev) => prev.filter((t) => t.id !== tempId));
+      setCreateError(err instanceof Error ? err.message : "Failed to create task");
     }
+  };
+
+  const handleTaskClick = (task: Task) => {
+    if (task.saving) return;
+    setTasks((prev) =>
+      prev.map((t) =>
+        t.id === task.id ? { ...t } : t
+      )
+    );
   };
 
   if (loading) {
@@ -132,6 +170,18 @@ export default function WorkspacePage() {
         </div>
       </div>
 
+      {createError && (
+        <div className="mx-6 mt-4 rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
+          {createError}
+          <button
+            className="ml-2 font-medium underline"
+            onClick={() => setCreateError("")}
+          >
+            Dismiss
+          </button>
+        </div>
+      )}
+
       <div className="flex-1 overflow-x-auto p-6">
         <div className="mx-auto flex w-fit gap-4">
           {columns.map((col) => (
@@ -140,6 +190,7 @@ export default function WorkspacePage() {
               status={col.status}
               tasks={col.tasks}
               onDrop={handleDrop}
+              onTaskClick={handleTaskClick}
             />
           ))}
         </div>

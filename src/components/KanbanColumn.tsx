@@ -3,15 +3,23 @@
 import { TaskCard } from "./TaskCard";
 import { Badge } from "./ui/Badge";
 
+interface User {
+  id: string;
+  name: string;
+  email: string;
+}
+
 interface Task {
   id: string;
   title: string;
   description?: string | null;
   status: string;
   priority: string;
-  assignee?: { id: string; name: string; email: string } | null;
+  assignee?: User | null;
+  creator?: User | null;
   _count?: { comments: number };
   dueDate?: string | null;
+  saving?: boolean;
 }
 
 const statusConfig: Record<string, { label: string; color: string }> = {
